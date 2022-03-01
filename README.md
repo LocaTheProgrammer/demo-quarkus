@@ -1,4 +1,5 @@
-# demo Project
+# quarkus e graphql nei commit
+andare a cercare nei commit per avere controller template quarkus e graphql 
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
