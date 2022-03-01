@@ -24,7 +24,7 @@ public class MovieResource {
     }
 
 
-    @Query()
+    @Query
     @Description("film from blablabla")
     public Movie getFilm(@Name("filmId") int id){
         return galaxyService.getFilm(id);
