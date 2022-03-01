@@ -67,11 +67,35 @@ public class GalaxyService {
 
     }
 
-    public List<Movie> getAllItems() {
+    public List<Movie> getAllMovies() {
         return films;
+    }
+
+    public List<Hero> getHeroList(){
+        return heroList;
     }
 
     public Movie getFilm(int id) {
         return films.get(id);
+    }
+
+    public Hero deleteHero(int id){
+       return heroList.remove(id);
+    }
+
+    public void addHero(Hero hero) {
+        heroList.add(hero);
+    }
+
+    public List<Hero> updateHero(Hero myHero) {
+        for (int i=0; i<heroList.size(); i++){
+            if(heroList.get(i).getId()!=null){
+                if(heroList.get(i).getId().equals(myHero.getId())){
+                   heroList.remove(i);
+                   heroList.add(myHero);
+                }
+            }
+        }
+        return heroList;
     }
 }
