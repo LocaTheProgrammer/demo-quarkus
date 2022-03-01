@@ -1,75 +1,35 @@
 package com.example;
 
 
+import jdk.jfr.Description;
 import model.Movie;
+import org.eclipse.microprofile.graphql.GraphQLApi;
+import org.eclipse.microprofile.graphql.Name;
+import org.eclipse.microprofile.graphql.Query;
+import service.GalaxyService;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.ArrayList;
+import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Path("/movies")
+@GraphQLApi
 public class MovieResource {
 
-    public List<Movie> movies = new ArrayList<>();
+    @Inject
+    GalaxyService galaxyService;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMovie(){
-        return Response.ok(movies).build();
-    }
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/size")
-    public Integer countMovies(){
-        return movies.size();
-    }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createMovie(Movie newMovie){
-        movies.add(newMovie);
-        return Response.ok(movies).build();
+    @Query("allFilms")
+    @Description("Get all Films from a galaxy far far away")
+    public List<Movie> getAllFilms() {
+        return galaxyService.getAllItems();
     }
 
 
-    @PUT
-    @Path("{id}/{title}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateMovie(
-        @PathParam("id") Long id,
-        @PathParam("title") String title
-    ){
-
-        movies = movies.stream().map(movie->{
-            if(movie.getId().equals(id)){
-                movie.setTitle(title);
-            }
-            return movie;
-        }).collect(Collectors.toList());
-        return Response.ok(movies).build();
+    @Query()
+    @Description("film from blablabla")
+    public Movie getFilm(@Name("filmId") int id){
+        return galaxyService.getFilm(id);
     }
-    @DELETE
-    @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteMovie(
-        @PathParam("id") Long id){
-        boolean removed=false;
-        Optional<Movie> movieToDelete = movies.stream().filter(movie ->movie.getId().equals(id)).findFirst();
-       if(movieToDelete.isPresent()){
-           removed= movies.remove(movieToDelete.get());
-       }
-       if (removed){
-           return Response.noContent().build();
-       }
-       return Response.status(Response.Status.BAD_REQUEST).build();
 
-    }
+
 
 }
